@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Comics;
+use App\Models\Comic;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -227,7 +227,7 @@ class ComicsSeeder extends Seeder
             ],
         ];
         foreach ($comics as $comic) {
-            $NewComic = new Comics();
+            $NewComic = new Comic();
             $NewComic->title = $comic['title'];
             $NewComic->description = $comic['description'];
             $NewComic->thumb = $comic['thumb'];

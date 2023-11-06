@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comic;
+use App\Http\Requests\StoreComicRequest;
+use App\Http\Requests\UpdateComicRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use function PHPUnit\Framework\isNull;
 
 class ComicsController extends Controller
 {
@@ -29,23 +32,19 @@ class ComicsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreComicRequest $request)
     {
-        $data = $request->all();
 
-        $newComic = new Comic();
-        $newComic->title = $data['title'];
-        $newComic->price = $data['price'];
-        $newComic->series = $data['series'];
+        $valData = $request->validated();
 
         if ($request->has('thumb')) {
             $file_path = Storage::put('comics_thumbs', $request->thumb);
-            $newComic->thumb = $file_path;
+            $valData['thumb'] = $file_path;
         }
 
-        $newComic->save();
+        $newComic = Comic::create($valData);
 
-        return to_route('admin.index');
+        return to_route('comics.index')->with('message', 'New entry Added');
     }
 
     /**
@@ -67,25 +66,24 @@ class ComicsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Comic $comics)
+    public function update(UpdateComicRequest $request, Comic $comic)
     {
-        $data = $request->all();
+        $valData = $request->validated();
 
-
-        if ($request->has('thumb') && $comics->thumb) {
-
-
-            Storage::delete($comics->thumb);
-
+        if ($request->has('thumb')) {
 
             $newCover = $request->thumb;
             $path = Storage::put('comics_thumbs', $newCover);
-            $data['thumb'] = $path;
+
+            if (!isNull($comic->thumb) && Storage::fileExists($comic->thumb)) {
+                Storage::delete($comic->thumb);
+            }
+
+            $valData['thumb'] = $path;
         }
 
-
-        $comics->update($data);
-        return to_route('comics.show', $comics);
+        $comic->update($valData);
+        return to_route('comics.show', $comic)->with('message', 'Comic Edited');
     }
 
     /**
@@ -93,15 +91,12 @@ class ComicsController extends Controller
      */
     public function destroy(Comic $comics)
     {
-        // CONTROLLA SE L'ISTANZA HA UN FILE DI ANTEPRIMA. SE SI LO ELIMINA DAL filesystem
         if (!is_null($comics->thumb)) {
             Storage::delete($comics->thumb);
         }
-        //dd($comics);
-        // ELIMINA IL RECORD DAL DATABASE
+
         $comics->delete();
 
-        // RIDIRIGE AD UNA ROTTA DESIDERATA CON UN MESSAGGIO
-        return to_route('comics.index')->with('message', 'Comic Deleted Succesfuly');
+        return to_route('comics.index')->with('message', 'Comic Deleted');
     }
 }

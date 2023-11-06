@@ -9,20 +9,20 @@
 
                 @include('partials.admin_alert')
 
-                <h1 class="text-center">All Comics:</h1>
+                <h1 class="text-center">ADMIN DATABASE</h1>
 
                 <div class="table-responsive rounded rounded-3">
                     <table class="table ">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Series</th>
-                                <th scope="col">Avaiable on:</th>
-                                <th scope="col">Type</th>
-                                <th scope="col">Thumb</th>
-                                <th scope="col">Actions</th>
+                                <th scope="col">TITOLO</th>
+                                <th scope="col">PREZZO</th>
+                                <th scope="col">SERIE</th>
+                                <th scope="col">IN VENDITA DAL</th>
+                                <th scope="col">TIPO</th>
+                                <th scope="col">THUMB</th>
+                                <th scope="col">ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,21 +50,15 @@
                                     @endif
                                     <td class="align-middle">
 
-                                        {{-- EDIT --}}
                                         <a class="btn btn-warning m-2" href="{{ route('comics.edit', $comic) }}">Edit</a>
 
-                                        {{-- DELETE --}}
-                                        <!-- Modal trigger button -->
                                         <button type="button" class="btn btn-danger m-2" data-bs-toggle="modal"
                                             data-bs-target="#modalComic{{ $comic->id }}">
                                             Delete
                                         </button>
 
-                                        <!-- Modal Body -->
-                                        <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
                                         <div class="modal fade" id="modalComic{{ $comic->id }}" tabindex="-1"
-                                            data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
-                                            aria-labelledby="modalTitleId" aria-hidden="true">
+                                            role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
                                             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
                                                 role="document">
                                                 <div class="modal-content">
@@ -76,9 +70,7 @@
                                                     </div>
                                                     <div class="modal-body">
 
-                                                        <p>Do you want to delete "{{ $comic->title }}"?</p>
-
-                                                        <p>This operation is not reversible!</p>
+                                                        <p>Delete "{{ $comic->title }}"?</p>
 
                                                     </div>
                                                     <div class="modal-footer">
@@ -100,7 +92,7 @@
                                     </td>
                                 </tr>
                             @empty
-                                <h1>Database is empty</h1>
+                                <h1>Empty</h1>
                             @endforelse
 
                         </tbody>

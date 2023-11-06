@@ -16,12 +16,25 @@
                         @csrf
                         @method('PUT')
 
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <div class="mb-3">
 
                             <label for="title" class="form-label"><strong>Title</strong></label>
 
                             <input type="text" class="form-control" name="title" id="title"
                                 aria-describedby="helpTitle" value="{{ $comic->title }}">
+                            @error('title')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
@@ -30,6 +43,9 @@
 
                             <input type="text" class="form-control" name="price" id="price"
                                 aria-describedby="helpprice" value="{{ $comic->price }}">
+                            @error('price')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
 
                         </div>
 
@@ -39,6 +55,9 @@
 
                             <input type="text" class="form-control" name="series" id="series"
                                 aria-describedby="helpseries" value="{{ $comic->series }}">
+                            @error('series')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
 
                         </div>
 
@@ -60,6 +79,9 @@
 
                             <input type="file" class="form-control" name="thumb" id="thumb" placeholder="Cerca..."
                                 aria-describedby="fileHelpThumb">
+                            @error('thumb')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
 
                         </div>
 
